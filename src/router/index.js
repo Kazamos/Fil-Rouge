@@ -3,9 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 // -----------------------------
 // 🔹 1. Routes automatiques
 // -----------------------------
-const exercicesModules = import.meta.glob('../views/Exercices/*.vue')
-const lessonsModules = import.meta.glob('../views/Lessons/*.vue')
-const tpModules = import.meta.glob('../views/TP/*.vue')
+const tripleTriadModules = import.meta.glob('../views/TripleTriad/*.vue')
+const tetraMasterModules = import.meta.glob('../views/TetraMaster/*.vue')
 
 // Fonction utilitaire pour générer des routes
 const makeRoutes = (modules, basePath) => {
@@ -20,9 +19,8 @@ const makeRoutes = (modules, basePath) => {
 }
 
 // Génération automatique des groupes
-const exercicesRoutes = makeRoutes(exercicesModules, '/exercices')
-const lessonsRoutes = makeRoutes(lessonsModules, '/lessons')
-const tpRoutes = makeRoutes(tpModules, '/tp')
+const tripleTriadRoutes = makeRoutes(tripleTriadModules, '/TripleTriad')
+const tetraMasterRoutes = makeRoutes(tetraMasterModules, '/TetraMaster')
 
 // -----------------------------
 // 🔹 2. Routes manuelles
@@ -32,6 +30,11 @@ const manualRoutes = [
     path: '/',
     name: 'home',
     component: () => import('../views/Home/Home.vue'),
+  },
+  {
+    path: '/jouer',
+    name: 'jouer',
+    component: () => import('../views/Jouer/Jouer.vue'),
   },
   {
     path: '/about',
@@ -53,11 +56,6 @@ const manualRoutes = [
     name: 'profile',
     component: () => import('../views/Profile/Profile.vue'),
   },
-  {
-    path: '/skills',
-    name: 'skills',
-    component: () => import('../views/Skills/Skills.vue'),
-  },
 ]
 
 // -----------------------------
@@ -65,9 +63,8 @@ const manualRoutes = [
 // -----------------------------
 const routes = [
   ...manualRoutes,
-  ...exercicesRoutes,
-  ...lessonsRoutes,
-  ...tpRoutes,
+  ...tripleTriadRoutes,
+  ...tetraMasterRoutes,
 ]
 
 // -----------------------------

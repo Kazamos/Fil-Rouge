@@ -11,15 +11,13 @@ const routes = computed(() => router.getRoutes())
 // Regrouper automatiquement par dossier
 const groupedRoutes = computed(() => {
 const groups = {
-    Exercices: [],
-    Lessons: [],
-    TP: [],
+    TripleTriad: [],
+    TetraMaster: [],
 }
 
 routes.value.forEach((r) => {
-    if (r.path.startsWith('/exercices/')) groups.Exercices.push(r)
-    else if (r.path.startsWith('/lessons/')) groups.Lessons.push(r)
-    else if (r.path.startsWith('/tp/')) groups.TP.push(r)
+    if (r.path.startsWith('/tripleTriad/')) groups.TripleTriad.push(r)
+    else if (r.path.startsWith('/tetraMaster/')) groups.TetraMaster.push(r)
 })
 
 // Tri alphabétique
@@ -32,10 +30,8 @@ return groups
 
 // Liens statiques
 const staticLinks = [
-{ name: 'Skills', path: '/skills' },
 { name: 'Login', path: '/login' },
 { name: 'Profile', path: '/profile' },
-{ name: 'About', path: '/about' },
 { name: 'Contact', path: '/contact' },
 ]
 
@@ -56,8 +52,8 @@ openDropdown.value = openDropdown.value === menuName ? null : menuName
 
 <!-- Navigation -->
         <nav class="hidden md:flex space-x-6 relative">
-
-            <RouterLink to="/" >Home</RouterLink>
+            <RouterLink to="/About" >À propos</RouterLink>
+            <RouterLink to="/jouer" >Jouer</RouterLink>
         
 <!-- Menus dynamiques -->
             <div v-for="(group, name) in groupedRoutes" :key="name" class="relative">
