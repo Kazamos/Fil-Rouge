@@ -15,6 +15,7 @@ const groups = {
     TetraMaster: [],
 }
 
+
 routes.value.forEach((r) => {
     if (r.path.startsWith('/tripleTriad/')) groups.TripleTriad.push(r)
     else if (r.path.startsWith('/tetraMaster/')) groups.TetraMaster.push(r)
