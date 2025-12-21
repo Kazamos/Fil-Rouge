@@ -11,6 +11,13 @@
         draggable="true"
         @dragstart="onDragStart(card)"
       >
+        <div
+            v-for="dir in card.arrows"
+            :key="dir"
+            class="arrow"
+            :class="dir"
+        ></div>
+
         <div class="name">{{ card.name }}</div>
 
         <div class="stats">
@@ -32,6 +39,13 @@
         @drop="onDrop(index)"
       >
         <div v-if="cell.card" class="card placed">
+            <div
+                v-for="dir in card.arrows"
+                :key="dir"
+                class="arrow"
+                :class="dir"
+            ></div>
+
           <div class="name">{{ cell.card.name }}</div>
 
           <div class="stats">
@@ -50,15 +64,21 @@ import { ref } from 'vue'
 
 const draggedCard = ref(null)
 
+const randomArrows = () => {
+  const directions = ['n','ne','e','se','s','sw','w','nw']
+  const count = Math.floor(Math.random() * 3) + 1
+  return directions.sort(() => 0.5 - Math.random()).slice(0, count)
+}
+
 const hand = ref([
-  { id: 1, name: 'Goblin', atk: 2, def: 1, type: 'P' },
-  { id: 2, name: 'Fang', atk: 3, def: 2, type: 'P' },
-  { id: 3, name: 'Skeleton', atk: 2, def: 3, type: 'M' },
-  { id: 4, name: 'Bomb', atk: 4, def: 1, type: 'X' },
-  { id: 5, name: 'Ironite', atk: 1, def: 4, type: 'P' },
-  { id: 6, name: 'Flan', atk: 2, def: 4, type: 'M' },
-  { id: 7, name: 'Sahagin', atk: 3, def: 3, type: 'P' },
-  { id: 8, name: 'Zaghnol', atk: 5, def: 2, type: 'X' }
+  { id: 1, name: 'Goblin', atk: 2, def: 1, type: 'P', arrows: randomArrows() },
+  { id: 2, name: 'Fang', atk: 3, def: 2, type: 'P', arrows: randomArrows() },
+  { id: 3, name: 'Skeleton', atk: 2, def: 3, type: 'M', arrows: randomArrows() },
+  { id: 4, name: 'Bomb', atk: 4, def: 1, type: 'X', arrows: randomArrows() },
+  { id: 5, name: 'Ironite', atk: 1, def: 4, type: 'P', arrows: randomArrows() },
+  { id: 6, name: 'Flan', atk: 2, def: 4, type: 'M', arrows: randomArrows() },
+  { id: 7, name: 'Sahagin', atk: 3, def: 3, type: 'P', arrows: randomArrows() },
+  { id: 8, name: 'Zaghnol', atk: 5, def: 2, type: 'X', arrows: randomArrows() }
 ])
 
 const board = ref(
@@ -166,5 +186,109 @@ const onDrop = (index) => {
   background: transparent;
   border: none;
   pointer-events: none;
+}
+
+.triangle {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 0;
+  height: 0;
+  border-top: 18px solid #f1c40f;   /* yellow */
+  border-right: 18px solid transparent;
+}
+
+.arrow {
+    pointer-events: none;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: transparent;
+}
+
+/* DARK YELLOW */
+.arrow {
+  --arrow-color: #c9a400;
+}
+
+/* NORTH */
+.arrow.n {
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid var(--arrow-color);
+}
+
+/* SOUTH */
+.arrow.s {
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 14px solid var(--arrow-color);
+}
+
+/* EAST */
+.arrow.e {
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 14px solid var(--arrow-color);
+}
+
+/* WEST */
+.arrow.w {
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 14px solid var(--arrow-color);
+}
+
+/* NORTHEAST */
+.arrow.ne {
+  top: 6px;
+  right: 6px;
+  transform: rotate(45deg);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 16px solid var(--arrow-color);
+}
+
+/* NORTHWEST */
+.arrow.nw {
+  top: 6px;
+  left: 6px;
+  transform: rotate(-45deg);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 16px solid var(--arrow-color);
+}
+
+/* SOUTHEAST */
+.arrow.se {
+  bottom: 6px;
+  right: 6px;
+  transform: rotate(-45deg);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 16px solid var(--arrow-color);
+}
+
+/* SOUTHWEST */
+.arrow.sw {
+  bottom: 6px;
+  left: 6px;
+  transform: rotate(45deg);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 16px solid var(--arrow-color);
 }
 </style>
