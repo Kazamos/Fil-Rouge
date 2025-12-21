@@ -1,8 +1,8 @@
 <template>
   <div class="tm-container">
-    <!-- Player hand -->
+    <!-- Hand -->
     <div class="hand">
-      <h3>Your Cards</h3>
+      <h3>Your Cards ({{ hand.length }})</h3>
 
       <div
         v-for="card in hand"
@@ -14,9 +14,9 @@
         <div class="name">{{ card.name }}</div>
 
         <div class="stats">
-          <span class="atk">ATK {{ card.atk }}</span>
-          <span class="def">DEF {{ card.def }}</span>
-          <span class="type">{{ card.type }}</span>
+          <div class="atk">ATK {{ card.atk }}</div>
+          <div class="def">DEF {{ card.def }}</div>
+          <div class="type">{{ card.type }}</div>
         </div>
       </div>
     </div>
@@ -27,16 +27,17 @@
         v-for="(cell, index) in board"
         :key="index"
         class="cell"
+        :class="{ disabled: !cell.playable }"
         @dragover.prevent
         @drop="onDrop(index)"
       >
-        <div v-if="cell" class="card placed">
-          <div class="name">{{ cell.name }}</div>
+        <div v-if="cell.card" class="card placed">
+          <div class="name">{{ cell.card.name }}</div>
 
           <div class="stats">
-            <span class="atk">ATK {{ cell.atk }}</span>
-            <span class="def">DEF {{ cell.def }}</span>
-            <span class="type">{{ cell.type }}</span>
+            <div class="atk">ATK {{ cell.card.atk }}</div>
+            <div class="def">DEF {{ cell.card.def }}</div>
+            <div class="type">{{ cell.card.type }}</div>
           </div>
         </div>
       </div>
@@ -54,20 +55,30 @@ const hand = ref([
   { id: 2, name: 'Fang', atk: 3, def: 2, type: 'P' },
   { id: 3, name: 'Skeleton', atk: 2, def: 3, type: 'M' },
   { id: 4, name: 'Bomb', atk: 4, def: 1, type: 'X' },
-  { id: 5, name: 'Ironite', atk: 1, def: 4, type: 'P' }
+  { id: 5, name: 'Ironite', atk: 1, def: 4, type: 'P' },
+  { id: 6, name: 'Flan', atk: 2, def: 4, type: 'M' },
+  { id: 7, name: 'Sahagin', atk: 3, def: 3, type: 'P' },
+  { id: 8, name: 'Zaghnol', atk: 5, def: 2, type: 'X' }
 ])
 
-const board = ref(Array(9).fill(null))
+const board = ref(
+  Array.from({ length: 16 }, () => ({
+    playable: true,
+    card: null
+  }))
+)
 
 const onDragStart = (card) => {
   draggedCard.value = card
 }
 
 const onDrop = (index) => {
-  if (board.value[index] !== null) return
+  const cell = board.value[index]
+  if (!cell.playable) return
+  if (cell.card) return
   if (!draggedCard.value) return
 
-  board.value[index] = draggedCard.value
+  cell.card = draggedCard.value
   hand.value = hand.value.filter(c => c.id !== draggedCard.value.id)
   draggedCard.value = null
 }
@@ -81,7 +92,6 @@ const onDrop = (index) => {
   padding: 40px;
 }
 
-/* HAND */
 .hand {
   display: flex;
   flex-direction: column;
@@ -92,12 +102,11 @@ const onDrop = (index) => {
   font-size: 28px;
 }
 
-/* CARD */
 .card {
   width: 160px;
   height: 160px;
   border: 4px solid #222;
-  background: #62c4fd;
+  background: #f5f5f5;
   position: relative;
   cursor: grab;
 }
@@ -106,43 +115,42 @@ const onDrop = (index) => {
   cursor: default;
 }
 
-/* NAME */
 .name {
   text-align: center;
   font-weight: bold;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
-/* STATS */
 .stats {
   position: absolute;
-  bottom: 8px;
-  width: 100%;
+  inset: 0;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   font-weight: bold;
 }
 
 .atk {
-  color: #8f2a1f;
+  color: #c0392b;
 }
 
 .def {
-  color: #1b5881;
+  color: #2980b9;
 }
 
 .type {
   background: #333;
   color: white;
-  padding: 2px 2px;
-  border-radius: 4px;
+  padding: 2px 10px;
+  border-radius: 6px;
 }
 
-/* BOARD */
 .board {
   display: grid;
-  grid-template-columns: repeat(3, 160px);
-  grid-template-rows: repeat(3, 160px);
+  grid-template-columns: repeat(4, 160px);
+  grid-template-rows: repeat(4, 160px);
   gap: 16px;
 }
 
@@ -152,5 +160,11 @@ const onDrop = (index) => {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.cell.disabled {
+  background: transparent;
+  border: none;
+  pointer-events: none;
 }
 </style>
