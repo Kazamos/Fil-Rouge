@@ -1,28 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 // -----------------------------
-// 🔹 1. Routes automatiques
-// -----------------------------
-const tripleTriadModules = import.meta.glob('../views/TripleTriad/*.vue')
-const tetraMasterModules = import.meta.glob('../views/TetraMaster/*.vue')
-
-// Fonction utilitaire pour générer des routes
-const makeRoutes = (modules, basePath) => {
-  return Object.keys(modules).map((path) => {
-    const name = path.split('/').pop().replace('.vue', '')
-    return {
-      path: `${basePath}/${name.toLowerCase()}`,
-      name: name,
-      component: modules[path],
-    }
-  })
-}
-
-// Génération automatique des groupes
-const tripleTriadRoutes = makeRoutes(tripleTriadModules, '/TripleTriad')
-const tetraMasterRoutes = makeRoutes(tetraMasterModules, '/TetraMaster')
-
-// -----------------------------
 // 🔹 2. Routes manuelles
 // -----------------------------
 const manualRoutes = [
@@ -47,14 +25,24 @@ const manualRoutes = [
     component: () => import('../views/Contact/Contact.vue'),
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('../views/Login/Login.vue'),
+    path: '/boutique',
+    name: 'boutique',
+    component: () => import('../views/Boutique/Boutique.vue'),
   },
   {
     path: '/profile',
     name: 'profile',
     component: () => import('../views/Profile/Profile.vue'),
+  },
+  {
+    path: '/tetramaster',
+    name: 'tetramaster',
+    component: () => import('../views/TetraMaster/TetraMaster.vue'),
+  },  
+  {
+    path: '/tripletriad',
+    name: 'tripletriad',
+    component: () => import('../views/TripleTriad/TripleTriad.vue'),
   },
 ]
 
@@ -62,9 +50,7 @@ const manualRoutes = [
 // 🔹 3. Fusion des routes
 // -----------------------------
 const routes = [
-  ...manualRoutes,
-  ...tripleTriadRoutes,
-  ...tetraMasterRoutes,
+  ...manualRoutes
 ]
 
 // -----------------------------
