@@ -1,6 +1,5 @@
 <template>
-  <div class="tt-container">
-    <!-- Main du joueur -->
+  <div class="container">
     <div class="hand">
       <h3>Vos cartes</h3>
 
@@ -19,7 +18,6 @@
       </div>
     </div>
 
-    <!-- Plateau -->
     <div class="board">
       <div
         v-for="(cell, index) in board"
@@ -70,13 +68,12 @@ const onDrop = (index) => {
 </script>
 
 <style scoped>
-.tt-container {
+.container {
   display: flex;
   gap: 80px;
   padding: 40px;
 }
 
-/* MAIN */
 .hand {
   display: flex;
   flex-direction: column;
@@ -87,13 +84,12 @@ const onDrop = (index) => {
   font-size: 28px;
 }
 
-/* CARTE */
 .card {
   position: relative;
   width: 160px;
   height: 160px;
   border: 4px solid #222;
-  background: #79ffed;
+  background: #0180a7;
   cursor: grab;
 }
 
@@ -139,7 +135,6 @@ const onDrop = (index) => {
   transform: translateY(-50%);
 }
 
-/* PLATEAU */
 .board {
   display: grid;
   grid-template-columns: repeat(3, 160px);

@@ -3,7 +3,7 @@
     <h1>Boutique</h1>
 
     <div class="points">
-      💎 Points disponibles : <strong>{{ points }}</strong>
+      Points disponibles : <strong>{{ points }}</strong>
     </div>
 
     <div class="cards">
