@@ -199,7 +199,6 @@ const onDrop = (index) => {
 }
 
 .arrow {
-    pointer-events: none;
   position: absolute;
   width: 0;
   height: 0;
