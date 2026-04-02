@@ -1,57 +1,40 @@
 <template>
-  <div class="tm-container">
-    <!-- Hand -->
-    <div class="hand">
+  <div class="game-container">
+    <div class="hand-container">
       <h3>Your Cards ({{ hand.length }})</h3>
-
       <div
         v-for="card in hand"
         :key="card.id"
-        class="card"
+        class="base-card tm-card"
         draggable="true"
         @dragstart="onDragStart(card)"
       >
-        <div
-            v-for="dir in card.arrows"
-            :key="dir"
-            class="arrow"
-            :class="dir"
-        ></div>
-
+        <div v-for="dir in card.arrows" :key="dir" class="arrow" :class="dir"></div>
         <div class="name">{{ card.name }}</div>
-
-        <div class="stats">
-          <div class="atk">ATK {{ card.atk }}</div>
-          <div class="def">DEF {{ card.def }}</div>
-          <div class="type">{{ card.type }}</div>
+        <div class="tm-stats">
+          <div class="tm-atk">ATK {{ card.atk }}</div>
+          <div class="tm-def">DEF {{ card.def }}</div>
+          <div class="tm-type">{{ card.type }}</div>
         </div>
       </div>
     </div>
 
-    <!-- Board -->
-    <div class="board">
+    <div class="game-board grid-4x4">
       <div
         v-for="(cell, index) in board"
         :key="index"
-        class="cell"
+        class="game-cell"
         :class="{ disabled: !cell.playable }"
         @dragover.prevent
         @drop="onDrop(index)"
       >
-        <div v-if="cell.card" class="card placed">
-            <div
-                v-for="dir in card.arrows"
-                :key="dir"
-                class="arrow"
-                :class="dir"
-            ></div>
-
+        <div v-if="cell.card" class="base-card tm-card placed">
+          <div v-for="dir in cell.card.arrows" :key="dir" class="arrow" :class="dir"></div>
           <div class="name">{{ cell.card.name }}</div>
-
-          <div class="stats">
-            <div class="atk">ATK {{ cell.card.atk }}</div>
-            <div class="def">DEF {{ cell.card.def }}</div>
-            <div class="type">{{ cell.card.type }}</div>
+          <div class="tm-stats">
+            <div class="tm-atk">ATK {{ cell.card.atk }}</div>
+            <div class="tm-def">DEF {{ cell.card.def }}</div>
+            <div class="tm-type">{{ cell.card.type }}</div>
           </div>
         </div>
       </div>
@@ -61,6 +44,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import '@/assets/esthetic.css' // Import du style global
 
 const draggedCard = ref(null)
 
@@ -103,191 +87,3 @@ const onDrop = (index) => {
   draggedCard.value = null
 }
 </script>
-
-<style scoped>
-
-.tm-container {
-  display: flex;
-  gap: 80px;
-  padding: 40px;
-}
-
-.hand {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.hand h3 {
-  font-size: 28px;
-}
-
-.card {
-  width: 160px;
-  height: 160px;
-  border: 4px solid #222;
-  background: #f5f5f5;
-  position: relative;
-  cursor: grab;
-}
-
-.card.placed {
-  cursor: default;
-}
-
-.name {
-  text-align: center;
-  font-weight: bold;
-  margin-top: 6px;
-}
-
-.stats {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-weight: bold;
-}
-
-.atk {
-  color: #c0392b;
-}
-
-.def {
-  color: #2980b9;
-}
-
-.type {
-  background: #333;
-  color: white;
-  padding: 2px 10px;
-  border-radius: 6px;
-}
-
-.board {
-  display: grid;
-  grid-template-columns: repeat(4, 160px);
-  grid-template-rows: repeat(4, 160px);
-  gap: 16px;
-}
-
-.cell {
-  border: 4px solid #444;
-  background: #ddd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cell.disabled {
-  background: transparent;
-  border: none;
-  pointer-events: none;
-}
-
-.triangle {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  width: 0;
-  height: 0;
-  border-top: 18px solid #f1c40f;   /* yellow */
-  border-right: 18px solid transparent;
-}
-
-.arrow {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-color: transparent;
-}
-
-/* DARK YELLOW */
-.arrow {
-  --arrow-color: #c9a400;
-}
-
-/* NORTH */
-.arrow.n {
-  top: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 14px solid var(--arrow-color);
-}
-
-/* SOUTH */
-.arrow.s {
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 14px solid var(--arrow-color);
-}
-
-/* EAST */
-.arrow.e {
-  right: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-left: 14px solid var(--arrow-color);
-}
-
-/* WEST */
-.arrow.w {
-  left: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-right: 14px solid var(--arrow-color);
-}
-
-/* NORTHEAST */
-.arrow.ne {
-  top: 6px;
-  right: 6px;
-  transform: rotate(45deg);
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 16px solid var(--arrow-color);
-}
-
-/* NORTHWEST */
-.arrow.nw {
-  top: 6px;
-  left: 6px;
-  transform: rotate(-45deg);
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 16px solid var(--arrow-color);
-}
-
-/* SOUTHEAST */
-.arrow.se {
-  bottom: 6px;
-  right: 6px;
-  transform: rotate(-45deg);
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 16px solid var(--arrow-color);
-}
-
-/* SOUTHWEST */
-.arrow.sw {
-  bottom: 6px;
-  left: 6px;
-  transform: rotate(45deg);
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 16px solid var(--arrow-color);
-}
-</style>
